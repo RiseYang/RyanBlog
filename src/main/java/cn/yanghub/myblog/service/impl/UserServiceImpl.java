@@ -1,12 +1,5 @@
 package cn.yanghub.myblog.service.impl;
 
-/**
- * @className: UserServiceImpl
- * @author: yang
- * @date: 2026/4/9 下午5:19
- * @Version: 1.0
- * @description:
- */
 import cn.yanghub.myblog.dto.UserDTO;
 import cn.yanghub.myblog.dto.UserLoginDTO;
 import cn.yanghub.myblog.dto.UserRegisterDTO;
@@ -29,6 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * @className: UserServiceImpl
+ * @author: yang
+ * @date: 2026/4/9 下午5:19
+ * @Version: 1.0
+ * @description:
+ */
 
 @Service
 @RequiredArgsConstructor
