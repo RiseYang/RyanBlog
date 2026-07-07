@@ -12,6 +12,10 @@ export function getPostById(id) {
   return request.get(`/posts/${id}`)
 }
 
+export function getPostBySlug(slug) {
+  return request.get(`/posts/slug/${encodeURIComponent(slug)}`)
+}
+
 export function createPost(data) {
   return request.post('/posts', data)
 }

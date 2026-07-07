@@ -22,6 +22,10 @@ export const useUserStore = defineStore('user', {
     },
 
     async login(form) {
+      this.token = ''
+      this.userInfo = null
+      localStorage.removeItem('token')
+      localStorage.removeItem('userInfo')
       const res = await loginApi(form)
       const data = res.data
       this.setSession(data.token, {

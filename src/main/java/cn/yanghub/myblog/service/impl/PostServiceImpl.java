@@ -49,15 +49,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public PostVO getPostBySlug(String slug) {
-        LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Post::getSlug, slug)
-                .eq(Post::getStatus, Post.PostStatus.published)
-                .eq(Post::getDeletedAt, null);
-        Post post = postMapper.selectOne(wrapper);
-        if (post == null) {
+        PostVO postVO = postMapper.selectPostVOBySlug(slug);
+        if (postVO == null) {
             throw new RuntimeException("文章不存在");
         }
-        return getPostById(post.getId());
+        postMapper.incrementViewCount(postVO.getId());
+        return postVO;
     }
 
     @Override

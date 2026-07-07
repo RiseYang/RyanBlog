@@ -74,7 +74,7 @@ public class Post {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
-    @TableLogic
+    @TableLogic(value = "NULL", delval = "NOW()")
     @TableField("deleted_at")
     private LocalDateTime deletedAt;
 

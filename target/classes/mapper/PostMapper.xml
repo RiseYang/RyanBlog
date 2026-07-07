@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanghub.myblog.mapper.PostMapper">
+
+    <sql id="postVoColumns">
+        p.id,
+        p.author_id,
+        p.category_id,
+        p.title,
+        p.slug,
+        p.excerpt,
+        p.content,
+        p.content_type,
+        p.cover_image,
+        p.cover_thumb,
+        p.status,
+        p.visibility,
+        p.published_at,
+        p.is_top,
+        p.is_featured,
+        p.is_original,
+        p.source_name,
+        p.source_url,
+        p.allow_comment,
+        p.view_count,
+        p.like_count,
+        p.comment_count,
+        p.word_count,
+        p.reading_time,
+        p.meta_title,
+        p.meta_description,
+        p.created_at,
+        p.updated_at,
+        u.nickname AS authorName,
+        u.avatar_url AS authorAvatar,
+        c.name AS categoryName,
+        c.slug AS categorySlug,
+        c.color AS categoryColor
+    </sql>
+
+    <select id="selectPostVOPage" resultType="cn.yanghub.myblog.vo.PostVO">
+        SELECT
+        <include refid="postVoColumns"/>
+        FROM posts p
+        INNER JOIN (
+            SELECT id FROM posts ${ew.customSqlSegment}
+        ) post_filter ON p.id = post_filter.id
+        LEFT JOIN users u ON p.author_id = u.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        ORDER BY p.is_top DESC, p.published_at DESC
+    </select>
+
+    <select id="selectFeaturedPosts" resultType="cn.yanghub.myblog.vo.PostVO">
+        SELECT
+        <include refid="postVoColumns"/>
+        FROM posts p
+        LEFT JOIN users u ON p.author_id = u.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.deleted_at IS NULL
+          AND p.status = 'published'
+          AND p.is_featured = 1
+        ORDER BY p.published_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="selectTopPosts" resultType="cn.yanghub.myblog.vo.PostVO">
+        SELECT
+        <include refid="postVoColumns"/>
+        FROM posts p
+        LEFT JOIN users u ON p.author_id = u.id
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.deleted_at IS NULL
+          AND p.status = 'published'
+          AND p.is_top = 1
+        ORDER BY p.published_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <update id="incrementViewCount">
+        UPDATE posts
+        SET view_count = view_count + 1
+        WHERE id = #{id}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="incrementLikeCount">
+        UPDATE posts
+        SET like_count = like_count + 1
+        WHERE id = #{id}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="incrementCommentCount">
+        UPDATE posts
+        SET comment_count = comment_count + 1
+        WHERE id = #{id}
+          AND deleted_at IS NULL
+    </update>
+
+</mapper>
