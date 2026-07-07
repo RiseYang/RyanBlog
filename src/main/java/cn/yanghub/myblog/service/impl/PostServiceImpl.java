@@ -5,6 +5,8 @@ import cn.yanghub.myblog.dto.PostCreateDTO;
 import cn.yanghub.myblog.dto.PostUpdateDTO;
 import cn.yanghub.myblog.entity.Post;
 import cn.yanghub.myblog.mapper.PostMapper;
+import cn.yanghub.myblog.mapper.UserMapper;
+import cn.yanghub.myblog.security.SecurityUtils;
 import cn.yanghub.myblog.service.PostService;
 import cn.yanghub.myblog.vo.PostVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -32,6 +34,7 @@ import java.util.List;
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
 
     private final PostMapper postMapper;
+    private final UserMapper userMapper;
 
     @Override
     public PostVO getPostById(Long id) {
@@ -63,9 +66,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
 
         wrapper.eq(Post::getStatus, Post.PostStatus.published)
-                .eq(Post::getDeletedAt, null)
-                .orderByDesc(Post::getIsTop)
-                .orderByDesc(Post::getPublishedAt);
+                .isNull(Post::getDeletedAt);
 
         if (categoryId != null) {
             wrapper.eq(Post::getCategoryId, categoryId);
@@ -81,13 +82,52 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    public IPage<PostVO> getAdminPostPage(Integer page, Integer size, Long categoryId, String keyword, Post.PostStatus status) {
+        Page<PostVO> pageParam = new Page<>(page, size);
+        LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
+        wrapper.isNull(Post::getDeletedAt);
+
+        if (status != null) {
+            wrapper.eq(Post::getStatus, status);
+        }
+        if (categoryId != null) {
+            wrapper.eq(Post::getCategoryId, categoryId);
+        }
+        if (keyword != null && !keyword.isEmpty()) {
+            wrapper.and(w -> w.like(Post::getTitle, keyword).or().like(Post::getExcerpt, keyword));
+        }
+        if (SecurityUtils.isSubscriber() && !SecurityUtils.isSuperAdmin()) {
+            Long userId = SecurityUtils.getCurrentUserId(userMapper);
+            if (userId == null) {
+                throw new org.springframework.security.access.AccessDeniedException("未登录");
+            }
+            wrapper.eq(Post::getAuthorId, userId);
+        }
+
+        return postMapper.selectPostVOPage(pageParam, wrapper);
+    }
+
+    @Override
     @Transactional
     public PostVO createPost(PostCreateDTO createDTO) {
         Post post = new Post();
         BeanUtils.copyProperties(createDTO, post);
 
-        // 设置作者ID（从SecurityContext获取）
-        // post.setAuthorId(getCurrentUserId());
+        if (post.getVisibility() == null) {
+            post.setVisibility(Post.Visibility.PUBLIC);
+        }
+        if (post.getStatus() == null) {
+            post.setStatus(Post.PostStatus.draft);
+        }
+        if (post.getContentType() == null) {
+            post.setContentType(Post.ContentType.markdown);
+        }
+
+        Long authorId = SecurityUtils.getCurrentUserId(userMapper);
+        if (authorId == null) {
+            throw new RuntimeException("未登录，无法创建文章");
+        }
+        post.setAuthorId(authorId);
 
         if (post.getStatus() == Post.PostStatus.published) {
             post.setPublishedAt(LocalDateTime.now());
@@ -112,6 +152,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             throw new RuntimeException("文章不存在");
         }
 
+        SecurityUtils.requirePostOwnerOrSuperAdmin(post, userMapper);
+
         BeanUtils.copyProperties(updateDTO, post, "id", "authorId", "createdAt");
 
         if (post.getStatus() == Post.PostStatus.published && post.getPublishedAt() == null) {
@@ -125,6 +167,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     @Transactional
     public void deletePost(Long id) {
+        SecurityUtils.requireSuperAdmin();
         postMapper.deleteById(id);
     }
 

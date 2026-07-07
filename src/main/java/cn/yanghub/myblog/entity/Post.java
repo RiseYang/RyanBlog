@@ -1,8 +1,11 @@
 package cn.yanghub.myblog.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import java.time.LocalDateTime;
 
 /**
@@ -80,10 +83,78 @@ public class Post {
     }
 
     public enum PostStatus {
-        draft, published, archived, scheduled, private_status
+        draft("draft"),
+        published("published"),
+        archived("archived"),
+        scheduled("scheduled"),
+        PRIVATE("private");
+
+        @EnumValue
+        @Getter
+        private final String value;
+
+        PostStatus(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        public String toJson() {
+            return value;
+        }
+
+        @JsonCreator
+        public static PostStatus fromValue(String value) {
+            if (value == null || value.isBlank()) {
+                return null;
+            }
+            for (PostStatus item : values()) {
+                if (item.value.equalsIgnoreCase(value) || item.name().equalsIgnoreCase(value)) {
+                    return item;
+                }
+            }
+            if ("private_status".equals(value)) {
+                return PRIVATE;
+            }
+            throw new IllegalArgumentException("Unknown PostStatus: " + value);
+        }
     }
 
     public enum Visibility {
-        public_visibility, password, private_visibility, paid
+        PUBLIC("public"),
+        PASSWORD("password"),
+        PRIVATE("private"),
+        PAID("paid");
+
+        @EnumValue
+        @Getter
+        private final String value;
+
+        Visibility(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        public String toJson() {
+            return value;
+        }
+
+        @JsonCreator
+        public static Visibility fromValue(String value) {
+            if (value == null || value.isBlank()) {
+                return null;
+            }
+            for (Visibility item : values()) {
+                if (item.value.equalsIgnoreCase(value) || item.name().equalsIgnoreCase(value)) {
+                    return item;
+                }
+            }
+            if ("public_visibility".equals(value)) {
+                return PUBLIC;
+            }
+            if ("private_visibility".equals(value)) {
+                return PRIVATE;
+            }
+            throw new IllegalArgumentException("Unknown Visibility: " + value);
+        }
     }
 }

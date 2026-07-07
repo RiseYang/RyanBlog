@@ -3,7 +3,6 @@ package cn.yanghub.myblog.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.apache.ibatis.type.LocalDateTimeTypeHandler;
 
 import java.time.LocalDateTime;
 
@@ -41,14 +40,15 @@ public class User {
     private Integer loginFailCount;
     private LocalDateTime lockedUntil;
 
-    @TableField(insertStrategy = FieldStrategy.NOT_NULL)
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 
-    @TableField(insertStrategy = FieldStrategy.NOT_NULL)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
-    @TableField(typeHandler = LocalDateTimeTypeHandler.class)
-    private String deletedAt;
+    @TableLogic
+    @TableField("deleted_at")
+    private Integer deletedAt;
 
     public enum UserRole {
         super_admin, admin, editor, author, subscriber

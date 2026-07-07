@@ -2,16 +2,11 @@ package cn.yanghub.myblog.dto;
 
 import cn.yanghub.myblog.entity.Post;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 import java.util.List;
 
-/**
- * @className: PostUpdateDTO
- * @author: yang
- * @date: 2026/4/9 下午6:12
- * @Version: 1.0
- * @description:
- */
+@Data
 public class PostUpdateDTO {
 
     private Long postId;

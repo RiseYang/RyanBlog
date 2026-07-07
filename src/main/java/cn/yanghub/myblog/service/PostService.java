@@ -15,6 +15,7 @@ public interface PostService extends IService<Post> {
     PostVO getPostById(Long id);
     PostVO getPostBySlug(String slug);
     IPage<PostVO> getPostPage(Integer page, Integer size, Long categoryId, String keyword);
+    IPage<PostVO> getAdminPostPage(Integer page, Integer size, Long categoryId, String keyword, Post.PostStatus status);
     PostVO createPost(PostCreateDTO createDTO);
     PostVO updatePost(Long id, @Valid PostUpdateDTO updateDTO);
     void deletePost(Long id);
