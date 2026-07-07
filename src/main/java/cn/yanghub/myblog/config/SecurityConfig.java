@@ -60,7 +60,6 @@ public class SecurityConfig {
                         .requestMatchers("/comments/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("super_admin")
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )

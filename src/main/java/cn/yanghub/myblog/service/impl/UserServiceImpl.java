@@ -116,8 +116,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserVO getCurrentUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userMapper.selectByUsername(username);
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getName())) {
+            throw new org.springframework.security.authentication.InsufficientAuthenticationException("未登录");
+        }
+        User user = userMapper.selectByUsername(authentication.getName());
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
         return convertToVO(user);
     }
 

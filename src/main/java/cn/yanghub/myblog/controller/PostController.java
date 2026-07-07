@@ -39,13 +39,6 @@ public class PostController {
         return Result.success(new PageResult<>(postPage));
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "根据 ID 获取文章", description = "获取文章详情并增加浏览量")
-    public Result<PostVO> getById(@Parameter(description = "文章 ID") @PathVariable Long id) {
-        PostVO post = postService.getPostById(id);
-        return Result.success(post);
-    }
-
     @GetMapping("/slug/{slug}")
     @Operation(summary = "根据 slug 获取文章", description = "通过 URL 别名获取已发布文章")
     public Result<PostVO> getBySlug(@Parameter(description = "文章 slug") @PathVariable String slug) {
@@ -81,6 +74,13 @@ public class PostController {
             @Parameter(description = "返回条数") @RequestParam(defaultValue = "5") Integer limit) {
         List<PostVO> posts = postService.getTopPosts(limit);
         return Result.success(posts);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "根据 ID 获取文章", description = "获取文章详情并增加浏览量")
+    public Result<PostVO> getById(@Parameter(description = "文章 ID") @PathVariable Long id) {
+        PostVO post = postService.getPostById(id);
+        return Result.success(post);
     }
 
     @PostMapping

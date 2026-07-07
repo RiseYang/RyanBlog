@@ -2,6 +2,7 @@ package cn.yanghub.myblog.config;
 
 import cn.yanghub.myblog.common.Result;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result<Void> handleAuthentication(AuthenticationException e) {
         return Result.error(401, "认证失败：" + e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Result<Void> handleAccessDenied(AccessDeniedException e) {
+        return Result.error(403, "无权限访问");
     }
 
     @ExceptionHandler(RuntimeException.class)

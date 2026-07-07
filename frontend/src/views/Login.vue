@@ -79,7 +79,7 @@ async function handleLogin() {
   try {
     await userStore.login(form)
     ElMessage.success('登录成功')
-    const redirect = route.query.redirect || '/'
+    const redirect = route.query.redirect || '/admin'
     router.push(redirect)
   } catch {
     // error handled by interceptor

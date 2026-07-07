@@ -7,31 +7,31 @@
       </div>
 
       <nav class="sidebar-nav">
-        <router-link to="/" class="nav-item" :class="{ active: route.path === '/' }">
+        <router-link to="/admin" class="nav-item" :class="{ active: route.path === '/admin' }">
           <el-icon><Odometer /></el-icon>
           <span>控制台</span>
         </router-link>
-        <router-link to="/posts" class="nav-item" :class="{ active: route.path === '/posts' }">
+        <router-link to="/admin/posts" class="nav-item" :class="{ active: route.path === '/admin/posts' }">
           <el-icon><Document /></el-icon>
           <span>文章管理</span>
         </router-link>
-        <router-link to="/categories" class="nav-item" :class="{ active: route.path === '/categories' }">
+        <router-link to="/admin/categories" class="nav-item" :class="{ active: route.path === '/admin/categories' }">
           <el-icon><FolderOpened /></el-icon>
           <span>分类管理</span>
         </router-link>
-        <router-link to="/tags" class="nav-item" :class="{ active: route.path === '/tags' }">
+        <router-link to="/admin/tags" class="nav-item" :class="{ active: route.path === '/admin/tags' }">
           <el-icon><PriceTag /></el-icon>
           <span>标签管理</span>
         </router-link>
-        <router-link to="/comments" v-if="canAccessComments" class="nav-item" :class="{ active: route.path === '/comments' }">
+        <router-link to="/admin/comments" v-if="canAccessComments" class="nav-item" :class="{ active: route.path === '/admin/comments' }">
           <el-icon><ChatDotRound /></el-icon>
           <span>评论管理</span>
         </router-link>
         <router-link
           v-if="canAccessUsers"
-          to="/users"
+          to="/admin/users"
           class="nav-item"
-          :class="{ active: route.path === '/users' }"
+          :class="{ active: route.path === '/admin/users' }"
         >
           <el-icon><User /></el-icon>
           <span>用户管理</span>

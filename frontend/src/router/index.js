@@ -3,6 +3,18 @@ import { useUserStore } from '@/stores/user'
 
 const routes = [
   {
+    path: '/',
+    name: 'Index',
+    component: () => import('@/views/Index.vue'),
+    meta: { title: '首页' }
+  },
+  {
+    path: '/post/:slug',
+    name: 'PostDetail',
+    component: () => import('@/views/PostDetail.vue'),
+    meta: { title: '文章详情', public: true }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login.vue'),
@@ -15,7 +27,7 @@ const routes = [
     meta: { guest: true }
   },
   {
-    path: '/',
+    path: '/admin',
     component: () => import('@/layouts/AdminLayout.vue'),
     meta: { requiresAuth: true },
     children: [
@@ -76,7 +88,7 @@ router.beforeEach((to) => {
   }
 
   if (to.meta.guest && userStore.isLoggedIn) {
-    return { name: 'Dashboard' }
+    return { name: 'Dashboard', path: '/admin' }
   }
 
   const requiredRoles = to.meta.roles

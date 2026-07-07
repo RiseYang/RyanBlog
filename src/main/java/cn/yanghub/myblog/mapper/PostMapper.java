@@ -23,6 +23,14 @@ public interface PostMapper extends BaseMapper<Post> {
             "WHERE p.id = #{id} AND p.deleted_at IS NULL")
     PostVO selectPostVOById(Long id);
 
+    @Select("SELECT p.*, u.nickname as authorName, u.avatar_url as authorAvatar, " +
+            "c.name as categoryName, c.slug as categorySlug " +
+            "FROM posts p " +
+            "LEFT JOIN users u ON p.author_id = u.id " +
+            "LEFT JOIN categories c ON p.category_id = c.id " +
+            "WHERE p.slug = #{slug} AND p.status = 'published' AND p.deleted_at IS NULL")
+    PostVO selectPostVOBySlug(String slug);
+
     IPage<PostVO> selectPostVOPage(IPage<PostVO> page, @Param(Constants.WRAPPER) Wrapper<Post> wrapper);
 
     List<PostVO> selectFeaturedPosts(@Param("limit") Integer limit);
