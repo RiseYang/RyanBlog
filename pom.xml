@@ -185,7 +185,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>cn.yanghub.myblog.MyblogApplication</mainClass>
-                    <skip>true</skip>
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>

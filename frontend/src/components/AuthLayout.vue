@@ -5,7 +5,7 @@
         <div class="logo">
           <el-icon :size="36"><Notebook /></el-icon>
         </div>
-        <h1>MyBlog</h1>
+        <h1>RyanBlog</h1>
         <p>个人博客管理系统</p>
         <ul class="features">
           <li><el-icon><EditPen /></el-icon> 文章创作与发布</li>

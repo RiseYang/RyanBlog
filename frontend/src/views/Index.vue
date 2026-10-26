@@ -5,7 +5,7 @@
       <div class="header-inner">
         <router-link to="/" class="logo">
           <span class="logo-icon">&lt;/&gt;</span>
-          <span>MyBlog</span>
+          <span>RyanBlog</span>
         </router-link>
         <nav class="nav-links">
           <a href="#top" :class="{ active: activeNav === 'home' }" @click="activeNav = 'home'">首页</a>
@@ -13,8 +13,8 @@
           <a href="#about" :class="{ active: activeNav === 'about' }" @click="activeNav = 'about'">关于</a>
         </nav>
         <div class="header-actions">
-          <router-link v-if="userStore.isLoggedIn" to="/admin" class="btn-outline">管理后台</router-link>
-          <router-link v-else to="/login" class="btn-primary-sm">登录</router-link>
+          <!-- <router-link v-if="userStore.isLoggedIn" to="/admin" class="btn-outline">管理后台</router-link>
+          <router-link v-else to="/login" class="btn-primary-sm">登录</router-link> -->
         </div>
       </div>
     </header>
@@ -25,7 +25,7 @@
       <div class="hero-inner">
         <h1>探索技术的无限可能</h1>
         <p class="hero-desc">
-          分享前端开发、UI/UX 设计和创新技术的深度见解，与开发者社区共同成长
+          分享Java、AI、数据库设计和创新技术的深度见解，与开发者社区共同成长
         </p>
         <div class="hero-actions">
           <a href="#articles" class="btn-primary" @click.prevent="scrollTo('articles')">开始阅读</a>
@@ -166,10 +166,10 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <span class="logo-icon">&lt;/&gt;</span>
-          <span>MyBlog</span>
+          <span>RyanBlog</span>
         </div>
         <p>分享技术见解，探索创新可能。与开发者社区一起学习、成长、创造美好未来。</p>
-        <p class="copyright">© {{ new Date().getFullYear() }} MyBlog. All rights reserved. Built with ❤️ and modern web technologies.</p>
+        <p class="copyright">© {{ new Date().getFullYear() }} RyanBlog. All rights reserved. Built with ❤️ and modern web technologies.</p>
       </div>
     </footer>
   </div>
@@ -207,7 +207,7 @@ const gradients = [
 ]
 
 const siteProfile = computed(() => ({
-  name: userStore.isLoggedIn ? (userStore.userInfo?.username || '用户') : 'MyBlog',
+  name: userStore.isLoggedIn ? (userStore.userInfo?.username || '用户') : 'RyanBlog',
   avatar: userStore.isLoggedIn ? userStore.avatar : '',
   bio: userStore.isLoggedIn
     ? (userStore.userInfo?.bio || '博客作者，热爱技术与创作。')

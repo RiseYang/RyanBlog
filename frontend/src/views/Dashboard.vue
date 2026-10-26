@@ -3,7 +3,7 @@
     <section class="welcome-banner">
       <div>
         <h2>你好，{{ userStore.displayName }} 👋</h2>
-        <p>欢迎回到 MyBlog 管理后台，今天也要继续创作优质内容。</p>
+        <p>欢迎回到 RyanBlog 管理后台，今天也要继续创作优质内容。</p>
       </div>
       <div class="banner-date">{{ today }}</div>
     </section>

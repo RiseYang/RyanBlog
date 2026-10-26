@@ -3,7 +3,7 @@
     <aside class="sidebar">
       <div class="sidebar-logo">
         <el-icon :size="24"><Notebook /></el-icon>
-        <span>MyBlog</span>
+        <span>RyanBlog</span>
       </div>
 
       <nav class="sidebar-nav">

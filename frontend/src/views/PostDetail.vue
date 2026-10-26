@@ -4,7 +4,7 @@
       <div class="header-inner">
         <router-link to="/" class="logo">
           <span class="logo-icon">&lt;/&gt;</span>
-          <span>MyBlog</span>
+          <span>RyanBlog</span>
         </router-link>
         <nav class="nav-links">
           <router-link to="/">首页</router-link>
@@ -35,7 +35,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>© {{ new Date().getFullYear() }} MyBlog. Built with Vue & Spring Boot.</p>
+      <p>© {{ new Date().getFullYear() }} RyanBlog. Built with Vue & Spring Boot.</p>
     </footer>
   </div>
 </template>
