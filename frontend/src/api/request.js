@@ -41,8 +41,8 @@ request.interceptors.response.use(
       ElMessage.error(loginMessage)
     } else if (status === 403 && isManagePage) {
       ElMessage.error(data?.message || '无权限访问')
-    } else if ((status === 401 || status === 403) && isPublicPage) {
-      ElMessage.error(data?.message || '请求失败')
+    } else if (isPublicPage) {
+      // 首页和文章页自己展示错误
     } else if (status === 401 || status === 403) {
       localStorage.removeItem('token')
       localStorage.removeItem('userInfo')

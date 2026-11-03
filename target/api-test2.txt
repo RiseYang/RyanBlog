@@ -1,0 +1,139 @@
+﻿===== login POST http://localhost:8081/api/auth/login =====
+STATUS 200
+{"code":200,"message":"success","data":{"role":"super_admin","nickname":"ç®¡çå","id":"1","avatar":null,"token":"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9zdXBlcl9hZG1pbiJ9XSwic3ViIjoiYWRtaW4iLCJpYXQiOjE3OTMwNzUzMDgsImV4cCI6MTc5MzE2MTcwOH0.iKXdsxCRbDhblwG3acsK6fSNDPlj_mMuNLk6q7muQXU","username":"admin"},"timestamp":"2026-10-27T12:28:28.5957863"}
+
+===== me GET http://localhost:8081/api/auth/me =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":1,"username":"admin","email":"admin@example.com","nickname":"ç®¡çå","avatarUrl":null,"bio":null,"website":null,"role":"super_admin","status":1,"lastLoginAt":"2026-10-27T12:28:29","createdAt":"2026-04-03T12:05:30"},"timestamp":"2026-10-27T12:28:28.859929"}
+
+===== empty-login POST http://localhost:8081/api/auth/login =====
+STATUS 400
+{"code":400,"message":"密码不能为空；用户名不能为空","data":null,"timestamp":"2026-10-27T12:28:28.9052327"}
+
+===== dup-user POST http://localhost:8081/api/auth/register =====
+STATUS 400
+{"code":400,"message":"用户名已存在","data":null,"timestamp":"2026-10-27T12:28:28.9647204"}
+
+===== cat-before GET http://localhost:8081/api/categories/3 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":3,"name":"åç«¯å¼å","slug":"backend","description":"Java/PHP/Python/Go/Node.js","parentId":null,"level":2,"path":"1,3","icon":null,"color":"#3b82f6","sortOrder":2,"isNav":1,"isFeatured":0,"postCount":3,"metaTitle":null,"metaDescription":null,"createdAt":"2026-04-03T12:05:30","updatedAt":"2026-10-27T12:22:04"},"timestamp":"2026-10-27T12:28:28.9808189"}
+
+===== no-slug POST http://localhost:8081/api/posts =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":9,"title":"èªå¨å«åæç« ","slug":"èªå¨å«åæç« ","excerpt":null,"content":"èªå¨çæ slug çæ­£æ","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:28:29","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":13,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":3,"categoryName":"åç«¯å¼å","categorySlug":"backend","categoryColor":"#3b82f6","tagNames":["åç«¯"],"tagSlugs":["åç«¯"]},"timestamp":"2026-10-27T12:28:29.1380687"}
+
+===== draft POST http://localhost:8081/api/posts =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":10,"title":"éèèç¨¿","slug":"éèèç¨¿","excerpt":null,"content":"secret draft","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"draft","visibility":"public","publishedAt":null,"isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":12,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":[],"tagSlugs":[]},"timestamp":"2026-10-27T12:28:29.1928217"}
+
+===== anon-draft GET http://localhost:8081/api/posts/10 =====
+STATUS 404
+{"code":404,"message":"文章不存在","data":null,"timestamp":"2026-10-27T12:28:29.2163794"}
+
+===== admin-draft GET http://localhost:8081/api/posts/10 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":10,"title":"éèèç¨¿","slug":"éèèç¨¿","excerpt":null,"content":"secret draft","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"draft","visibility":"public","publishedAt":null,"isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":12,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":[],"tagSlugs":[]},"timestamp":"2026-10-27T12:28:29.2353947"}
+
+===== admin-draft-2 GET http://localhost:8081/api/posts/10 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":10,"title":"éèèç¨¿","slug":"éèèç¨¿","excerpt":null,"content":"secret draft","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"draft","visibility":"public","publishedAt":null,"isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":12,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":[],"tagSlugs":[]},"timestamp":"2026-10-27T12:28:29.2619024"}
+
+===== dup-slug POST http://localhost:8081/api/posts =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":11,"title":"dup","slug":"Ã¨ÂÂªÃ¥ÂÂ¨Ã¥ÂÂ«Ã¥ÂÂÃ¦ÂÂÃ§Â«Â ","excerpt":null,"content":"x","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"draft","visibility":"public","publishedAt":null,"isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":1,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":[],"tagSlugs":[]},"timestamp":"2026-10-27T12:28:29.3061545"}
+
+===== bad-cat POST http://localhost:8081/api/posts =====
+STATUS 400
+{"code":400,"message":"分类不存在","data":null,"timestamp":"2026-10-27T12:28:29.3382274"}
+
+===== bad-tag POST http://localhost:8081/api/posts =====
+STATUS 400
+{"code":400,"message":"标签不存在","data":null,"timestamp":"2026-10-27T12:28:29.3807789"}
+
+===== comment-draft POST http://localhost:8081/api/comments =====
+STATUS 404
+{"code":404,"message":"文章不存在","data":null,"timestamp":"2026-10-27T12:28:29.4008782"}
+
+===== guest POST http://localhost:8081/api/comments =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":4,"postId":9,"parentId":null,"rootId":null,"userId":null,"visitorName":"æ¸¸å®¢ç²","visitorEmail":null,"visitorWebsite":null,"content":"hello guest","contentHtml":null,"isAuthor":0,"status":"pending","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:28:29.4160521","nickname":"æ¸¸å®¢ç²","avatarUrl":null,"replies":null,"postTitle":"èªå¨å«åæç« "},"timestamp":"2026-10-27T12:28:29.4331257"}
+
+===== admin-c POST http://localhost:8081/api/comments =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":5,"postId":9,"parentId":4,"rootId":4,"userId":1,"visitorName":null,"visitorEmail":null,"visitorWebsite":null,"content":"author says","contentHtml":null,"isAuthor":1,"status":"pending","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:28:29.4730657","nickname":"ç®¡çå","avatarUrl":null,"replies":null,"postTitle":"èªå¨å«åæç« "},"timestamp":"2026-10-27T12:28:29.5091853"}
+
+===== trash PUT http://localhost:8081/api/comments/4/status?status=trash =====
+STATUS 400
+{"code":400,"message":"参数格式不正确","data":null,"timestamp":"2026-10-27T12:28:29.5323671"}
+
+===== approve-guest PUT http://localhost:8081/api/comments/4/status?status=approved =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:28:29.5603331"}
+
+===== approve-admin PUT http://localhost:8081/api/comments/5/status?status=approved =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:28:29.5942108"}
+
+===== comments GET http://localhost:8081/api/comments/post/9 =====
+STATUS 200
+{"code":200,"message":"success","data":[{"id":4,"postId":9,"parentId":null,"rootId":null,"userId":null,"visitorName":"æ¸¸å®¢ç²","visitorEmail":null,"visitorWebsite":null,"content":"hello guest","contentHtml":null,"isAuthor":0,"status":"approved","likeCount":0,"replyCount":1,"createdAt":"2026-10-27T12:28:29","nickname":"æ¸¸å®¢ç²","avatarUrl":null,"replies":[{"id":5,"postId":9,"parentId":4,"rootId":4,"userId":1,"visitorName":null,"visitorEmail":null,"visitorWebsite":null,"content":"author says","contentHtml":null,"isAuthor":1,"status":"approved","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:28:29","nickname":"ç®¡çå","avatarUrl":null,"replies":[],"postTitle":null}],"postTitle":null}],"timestamp":"2026-10-27T12:28:29.6124792"}
+
+===== detail GET http://localhost:8081/api/posts/9 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":9,"title":"èªå¨å«åæç« ","slug":"èªå¨å«åæç« ","excerpt":null,"content":"èªå¨çæ slug çæ­£æ","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:28:29","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":1,"likeCount":0,"commentCount":2,"wordCount":13,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":3,"categoryName":"åç«¯å¼å","categorySlug":"backend","categoryColor":"#3b82f6","tagNames":["åç«¯"],"tagSlugs":["åç«¯"]},"timestamp":"2026-10-27T12:28:29.637833"}
+
+===== detail2 GET http://localhost:8081/api/posts/9 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":9,"title":"èªå¨å«åæç« ","slug":"èªå¨å«åæç« ","excerpt":null,"content":"èªå¨çæ slug çæ­£æ","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:28:29","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":2,"likeCount":0,"commentCount":2,"wordCount":13,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:28:29","updatedAt":"2026-10-27T12:28:29","authorId":1,"authorName":"ç®¡çå","authorAvatar":null,"categoryId":3,"categoryName":"åç«¯å¼å","categorySlug":"backend","categoryColor":"#3b82f6","tagNames":["åç«¯"],"tagSlugs":["åç«¯"]},"timestamp":"2026-10-27T12:28:29.6652754"}
+
+===== cat-after GET http://localhost:8081/api/categories/3 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":3,"name":"åç«¯å¼å","slug":"backend","description":"Java/PHP/Python/Go/Node.js","parentId":null,"level":2,"path":"1,3","icon":null,"color":"#3b82f6","sortOrder":2,"isNav":1,"isFeatured":0,"postCount":4,"metaTitle":null,"metaDescription":null,"createdAt":"2026-04-03T12:05:30","updatedAt":"2026-10-27T12:28:29"},"timestamp":"2026-10-27T12:28:29.6808208"}
+
+===== tags GET http://localhost:8081/api/tags =====
+STATUS 200
+{"code":200,"message":"success","data":[{"id":1,"name":"åç«¯","slug":"åç«¯","color":"#0d9488","description":"123","postCount":1,"isFeatured":0,"createdAt":"2026-07-07T21:15:19"},{"id":2,"name":"åç«¯","slug":"åç«¯","color":"#940d24","description":"dsds","postCount":0,"isFeatured":0,"createdAt":"2026-07-07T21:15:49"}],"timestamp":"2026-10-27T12:28:29.7008802"}
+
+===== sub-login POST http://localhost:8081/api/auth/login =====
+STATUS 200
+{"code":200,"message":"success","data":{"role":"subscriber","nickname":"checker","id":"5","avatar":null,"token":"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9zdWJzY3JpYmVyIn1dLCJzdWIiOiJidWdjaGVja2VyIiwiaWF0IjoxNzkzMDc1MzA5LCJleHAiOjE3OTMxNjE3MDl9.nF1wbAA7vGblxOXvKkZyIJhum0Vk7RXPF3EGnEKhCYo","username":"bugchecker"},"timestamp":"2026-10-27T12:28:29.8031712"}
+
+===== sub-own-update PUT http://localhost:8081/api/posts/7 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":7,"title":"sub post edited","slug":"bugcheck-sub-slug","excerpt":null,"content":"mine edited","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:05","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":11,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:05","updatedAt":"2026-10-27T12:22:05","authorId":5,"authorName":"checker","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":[],"tagSlugs":[]},"timestamp":"2026-10-27T12:28:29.8535711"}
+
+===== sub-other PUT http://localhost:8081/api/posts/9 =====
+STATUS 403
+{"code":403,"message":"无权限访问","data":null,"timestamp":"2026-10-27T12:28:29.878437"}
+
+===== sub-manage GET http://localhost:8081/api/posts/manage?page=1&size=10 =====
+STATUS 200
+{"code":200,"message":"success","data":{"records":[{"id":7,"title":"sub post edited","slug":"bugcheck-sub-slug","excerpt":null,"content":"mine edited","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:05","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":11,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:05","updatedAt":"2026-10-27T12:22:05","authorId":5,"authorName":"checker","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":[],"tagSlugs":[]}],"total":1,"current":1,"size":10,"pages":1},"timestamp":"2026-10-27T12:28:29.9862975"}
+
+===== sub-see-admin-draft GET http://localhost:8081/api/posts/10 =====
+STATUS 404
+{"code":404,"message":"文章不存在","data":null,"timestamp":"2026-10-27T12:28:30.0127337"}
+
+===== del-c-5 DELETE http://localhost:8081/api/comments/5 =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:28:30.0689543"}
+
+===== del-c-4 DELETE http://localhost:8081/api/comments/4 =====
+STATUS 500
+{"code":500,"message":"数据操作失败","data":null,"timestamp":"2026-10-27T12:28:30.1442549"}
+
+===== del-user DELETE http://localhost:8081/api/users/5 =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:28:30.2254728"}
+
+===== after-del-draft GET http://localhost:8081/api/posts/10 =====
+STATUS 404
+{"code":404,"message":"文章不存在","data":null,"timestamp":"2026-10-27T12:28:30.2461005"}
+
+===== cat-final GET http://localhost:8081/api/categories/3 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":3,"name":"åç«¯å¼å","slug":"backend","description":"Java/PHP/Python/Go/Node.js","parentId":null,"level":2,"path":"1,3","icon":null,"color":"#3b82f6","sortOrder":2,"isNav":1,"isFeatured":0,"postCount":4,"metaTitle":null,"metaDescription":null,"createdAt":"2026-04-03T12:05:30","updatedAt":"2026-10-27T12:28:29"},"timestamp":"2026-10-27T12:28:30.2585816"}
+
+===== missing GET http://localhost:8081/api/posts/999999 =====
+STATUS 404
+{"code":404,"message":"文章不存在","data":null,"timestamp":"2026-10-27T12:28:30.2778133"}

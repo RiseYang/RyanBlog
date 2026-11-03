@@ -50,12 +50,8 @@ public class CommentController {
     @Operation(summary = "发表评论", description = "游客需填写 visitorName；登录用户自动关联账号")
     public Result<CommentVO> create(@Valid @RequestBody CommentCreateDTO createDTO,
                                     HttpServletRequest request) {
-        if (createDTO.getVisitorIp() == null) {
-            createDTO.setVisitorIp(request.getRemoteAddr());
-        }
-        if (createDTO.getUserAgent() == null) {
-            createDTO.setUserAgent(request.getHeader("User-Agent"));
-        }
+        createDTO.setVisitorIp(request.getRemoteAddr());
+        createDTO.setUserAgent(request.getHeader("User-Agent"));
         CommentVO comment = commentService.createComment(createDTO);
         return Result.success(comment);
     }

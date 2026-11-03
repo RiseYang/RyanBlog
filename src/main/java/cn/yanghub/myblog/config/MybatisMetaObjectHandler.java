@@ -18,6 +18,8 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        strictUpdateFill(metaObject, "updatedAt", LocalDateTime.class, LocalDateTime.now());
+        if (metaObject.hasSetter("updatedAt")) {
+            setFieldValByName("updatedAt", LocalDateTime.now(), metaObject);
+        }
     }
 }

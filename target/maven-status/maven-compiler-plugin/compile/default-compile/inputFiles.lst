@@ -1,9 +1,11 @@
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\impl\CategoryServiceImpl.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\mapper\UserMapper.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\impl\PostServiceImpl.java
+E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\impl\LikeServiceImpl.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\dto\UserAdminDTO.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\security\SecurityUtils.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\TagService.java
+E:\projects\myblog\src\main\java\cn\yanghub\myblog\common\BizException.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\dto\PostUpdateDTO.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\mapper\TagMapper.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\CustomUserDetailsService.java
@@ -21,6 +23,7 @@ E:\projects\myblog\src\main\java\cn\yanghub\myblog\mapper\CommentMapper.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\config\OpenApiConfig.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\controller\PostController.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\vo\PostVO.java
+E:\projects\myblog\src\main\java\cn\yanghub\myblog\dto\LikeRequest.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\controller\TagController.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\entity\Post.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\utils\JwtUtil.java
@@ -29,6 +32,7 @@ E:\projects\myblog\src\main\java\cn\yanghub\myblog\controller\AuthController.jav
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\common\Result.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\security\JwtAuthenticationFilter.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\config\WebMvcConfig.java
+E:\projects\myblog\src\main\java\cn\yanghub\myblog\vo\LikeState.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\mapper\PostMapper.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\MyblogApplication.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\vo\CommentVO.java
@@ -37,6 +41,7 @@ E:\projects\myblog\src\main\java\cn\yanghub\myblog\dto\CommentCreateDTO.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\CategoryService.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\PostService.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\entity\Tag.java
+E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\LikeService.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\vo\UserVO.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\config\UserDataInitializer.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\config\MybatisMetaObjectHandler.java
@@ -49,3 +54,4 @@ E:\projects\myblog\src\main\java\cn\yanghub\myblog\service\impl\CommentServiceIm
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\dto\UserLoginDTO.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\config\MyBatisPlusConfig.java
 E:\projects\myblog\src\main\java\cn\yanghub\myblog\common\PageResult.java
+E:\projects\myblog\src\main\java\cn\yanghub\myblog\controller\LikeController.java

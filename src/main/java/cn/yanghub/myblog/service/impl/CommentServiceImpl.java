@@ -1,5 +1,6 @@
 package cn.yanghub.myblog.service.impl;
 
+import cn.yanghub.myblog.common.BizException;
 import cn.yanghub.myblog.common.PageResult;
 import cn.yanghub.myblog.dto.CommentCreateDTO;
 import cn.yanghub.myblog.entity.Comment;
@@ -46,6 +47,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public List<CommentVO> getCommentsByPostId(Long postId) {
         List<CommentVO> comments = commentMapper.selectCommentsByPostId(postId);
+        for (CommentVO comment : comments) {
+            fillDisplayName(comment);
+        }
         return buildCommentTree(comments);
     }
 
@@ -74,17 +78,37 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     @Transactional
     public CommentVO createComment(CommentCreateDTO createDTO) {
+        String content = createDTO.getContent() == null ? "" : createDTO.getContent().trim();
+        if (!StringUtils.hasText(content)) {
+            throw BizException.badRequest("评论内容不能为空");
+        }
+        if (content.length() > 500) {
+            throw BizException.badRequest("评论最多 500 字");
+        }
+        createDTO.setContent(content);
+        if (createDTO.getVisitorName() != null) {
+            String visitorName = createDTO.getVisitorName().trim();
+            if (visitorName.length() > 50) {
+                throw BizException.badRequest("昵称最多 50 字");
+            }
+            createDTO.setVisitorName(visitorName);
+        }
+        if (createDTO.getUserAgent() != null && createDTO.getUserAgent().length() > 500) {
+            createDTO.setUserAgent(createDTO.getUserAgent().substring(0, 500));
+        }
         Post post = postMapper.selectById(createDTO.getPostId());
-        if (post == null) {
-            throw new RuntimeException("文章不存在");
+        if (post == null || post.getStatus() != Post.PostStatus.published
+                || (post.getVisibility() != null && post.getVisibility() != Post.Visibility.PUBLIC)) {
+            throw BizException.notFound("文章不存在");
         }
         if (post.getAllowComment() != null && post.getAllowComment() == 0) {
-            throw new RuntimeException("该文章不允许评论");
+            throw BizException.badRequest("该文章不允许评论");
         }
 
         Comment comment = new Comment();
-        BeanUtils.copyProperties(createDTO, comment);
-        comment.setStatus(Comment.CommentStatus.pending);
+        BeanUtils.copyProperties(createDTO, comment, "userId");
+        comment.setUserId(null);
+        comment.setStatus(Comment.CommentStatus.approved);
         comment.setLikeCount(0);
         comment.setReplyCount(0);
         comment.setIsAuthor(0);
@@ -97,31 +121,22 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 comment.setIsAuthor(1);
             }
         } else if (!StringUtils.hasText(createDTO.getVisitorName())) {
-            throw new RuntimeException("游客评论需填写昵称");
+            throw BizException.badRequest("游客评论需填写昵称");
         }
 
         if (comment.getParentId() != null) {
             Comment parent = commentMapper.selectById(comment.getParentId());
             if (parent == null) {
-                throw new RuntimeException("父评论不存在");
+                throw BizException.notFound("父评论不存在");
             }
             if (!parent.getPostId().equals(createDTO.getPostId())) {
-                throw new RuntimeException("父评论不属于该文章");
+                throw BizException.badRequest("父评论不属于该文章");
             }
             comment.setRootId(parent.getRootId() != null ? parent.getRootId() : parent.getId());
         }
 
         commentMapper.insert(comment);
-
-        if (comment.getParentId() != null) {
-            commentMapper.update(null, new LambdaUpdateWrapper<Comment>()
-                    .eq(Comment::getId, comment.getParentId())
-                    .setSql("reply_count = reply_count + 1"));
-        }
-
-        CommentVO vo = new CommentVO();
-        BeanUtils.copyProperties(comment, vo);
-        return vo;
+        return convertToVO(comment);
     }
 
     @Override
@@ -129,10 +144,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public void updateCommentStatus(Long id, Comment.CommentStatus status) {
         Comment comment = commentMapper.selectById(id);
         if (comment == null) {
-            throw new RuntimeException("评论不存在");
+            throw BizException.notFound("评论不存在");
         }
+        Comment.CommentStatus previous = comment.getStatus();
         comment.setStatus(status);
         commentMapper.updateById(comment);
+        adjustPostCommentCount(comment.getPostId(), previous, status);
     }
 
     @Override
@@ -140,7 +157,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public void deleteComment(Long id) {
         Comment comment = commentMapper.selectById(id);
         if (comment == null) {
-            throw new RuntimeException("评论不存在");
+            throw BizException.notFound("评论不存在");
         }
         commentMapper.deleteById(id);
 
@@ -169,6 +186,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             CommentVO parent = commentMap.get(comment.getParentId());
             if (parent != null) {
                 parent.getReplies().add(comment);
+            } else {
+                roots.add(comment);
             }
         }
 
@@ -188,11 +207,31 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         } else {
             vo.setNickname(comment.getVisitorName());
         }
+        fillDisplayName(vo);
         Post post = postMapper.selectById(comment.getPostId());
         if (post != null) {
             vo.setPostTitle(post.getTitle());
         }
         return vo;
+    }
+
+    private void fillDisplayName(CommentVO comment) {
+        if (comment != null && !StringUtils.hasText(comment.getNickname())) {
+            comment.setNickname(comment.getVisitorName());
+        }
+    }
+
+    private void adjustPostCommentCount(Long postId, Comment.CommentStatus previous, Comment.CommentStatus current) {
+        boolean wasApproved = previous == Comment.CommentStatus.approved;
+        boolean nowApproved = current == Comment.CommentStatus.approved;
+        if (wasApproved == nowApproved || postId == null) {
+            return;
+        }
+        if (nowApproved) {
+            postMapper.incrementCommentCount(postId);
+        } else {
+            postMapper.decrementCommentCount(postId);
+        }
     }
 
     private Long getCurrentUserId() {

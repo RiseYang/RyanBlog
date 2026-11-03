@@ -51,6 +51,6 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     public enum CommentStatus {
-        pending, approved, rejected, spam, trash
+        pending, approved, rejected, spam
     }
 }

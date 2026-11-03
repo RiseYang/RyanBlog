@@ -1,0 +1,111 @@
+﻿===== login-admin POST http://localhost:8081/api/auth/login =====
+STATUS 200
+{"code":200,"message":"success","data":{"role":"super_admin","nickname":"管理员","id":"1","avatar":null,"token":"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9zdXBlcl9hZG1pbiJ9XSwic3ViIjoiYWRtaW4iLCJpYXQiOjE3OTMwNzQ5MjMsImV4cCI6MTc5MzE2MTMyM30.W-AJV_-l96_Rus08LLmKqAnrIDYhuZrLOiOepwcATIQ","username":"admin"},"timestamp":"2026-10-27T12:22:03.7514597"}
+
+===== me GET http://localhost:8081/api/auth/me =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":1,"username":"admin","email":"admin@example.com","nickname":"管理员","avatarUrl":null,"bio":null,"website":null,"role":"super_admin","status":1,"lastLoginAt":"2026-10-27T12:22:04","createdAt":"2026-04-03T12:05:30"},"timestamp":"2026-10-27T12:22:04.0124057"}
+
+===== login-empty POST http://localhost:8081/api/auth/login =====
+STATUS 400
+{"timestamp":"2026-10-27T04:22:04.045+00:00","status":400,"error":"Bad Request","path":"/api/auth/login"}
+
+===== create-no-slug POST http://localhost:8081/api/posts =====
+STATUS 500
+{"code":500,"message":"\r\n### Error updating database.  Cause: java.sql.SQLException: Field 'slug' doesn't have a default value\r\n### The error may exist in cn/yanghub/myblog/mapper/PostMapper.java (best guess)\r\n### The error may involve cn.yanghub.myblog.mapper.PostMapper.insert-Inline\r\n### The error occurred while setting parameters\r\n### SQL: INSERT INTO posts  ( author_id,  title,   content, content_type,   status, visibility,                word_count, reading_time,     created_at, updated_at )  VALUES  ( ?,  ?,   ?, ?,   ?, ?,                ?, ?,     ?, ? )\r\n### Cause: java.sql.SQLException: Field 'slug' doesn't have a default value\n; Field 'slug' doesn't have a default value","data":null,"timestamp":"2026-10-27T12:22:04.210134"}
+
+===== create-draft POST http://localhost:8081/api/posts =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":5,"title":"bugcheck-draft","slug":"bugcheck-draft-slug","excerpt":null,"content":"draft body","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"draft","visibility":"public","publishedAt":null,"isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":10,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":null,"tagSlugs":null},"timestamp":"2026-10-27T12:22:04.2705206"}
+
+===== public-get-draft GET http://localhost:8081/api/posts/5 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":5,"title":"bugcheck-draft","slug":"bugcheck-draft-slug","excerpt":null,"content":"draft body","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"draft","visibility":"public","publishedAt":null,"isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":10,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":null,"tagSlugs":null},"timestamp":"2026-10-27T12:22:04.3055881"}
+
+===== public-slug-draft GET http://localhost:8081/api/posts/slug/bugcheck-draft-slug =====
+STATUS 500
+{"code":500,"message":"文章不存在","data":null,"timestamp":"2026-10-27T12:22:04.3322578"}
+
+===== create-published POST http://localhost:8081/api/posts =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":6,"title":"bugcheck-pub","slug":"bugcheck-pub-slug","excerpt":null,"content":"published body words","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:04","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":20,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":3,"categoryName":"后端开发","categorySlug":"backend","categoryColor":null,"tagNames":null,"tagSlugs":null},"timestamp":"2026-10-27T12:22:04.3706783"}
+
+===== get-pub GET http://localhost:8081/api/posts/6 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":6,"title":"bugcheck-pub","slug":"bugcheck-pub-slug","excerpt":null,"content":"published body words","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:04","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":20,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":3,"categoryName":"后端开发","categorySlug":"backend","categoryColor":null,"tagNames":null,"tagSlugs":null},"timestamp":"2026-10-27T12:22:04.4022455"}
+
+===== guest-comment POST http://localhost:8081/api/comments =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":1,"postId":6,"parentId":null,"rootId":null,"userId":null,"visitorName":"guestA","visitorEmail":null,"visitorWebsite":null,"content":"guest hi","contentHtml":null,"isAuthor":0,"status":"pending","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:22:04.4344233","nickname":null,"avatarUrl":null,"replies":null,"postTitle":null},"timestamp":"2026-10-27T12:22:04.4558558"}
+
+===== spoof-userid POST http://localhost:8081/api/comments =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":2,"postId":6,"parentId":null,"rootId":null,"userId":1,"visitorName":"hacker","visitorEmail":null,"visitorWebsite":null,"content":"spoof","contentHtml":null,"isAuthor":0,"status":"pending","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:22:04.4783791","nickname":null,"avatarUrl":null,"replies":null,"postTitle":null},"timestamp":"2026-10-27T12:22:04.4906272"}
+
+===== admin-comment POST http://localhost:8081/api/comments =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":3,"postId":6,"parentId":null,"rootId":null,"userId":1,"visitorName":null,"visitorEmail":null,"visitorWebsite":null,"content":"admin comment","contentHtml":null,"isAuthor":1,"status":"pending","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:22:04.523624","nickname":null,"avatarUrl":null,"replies":null,"postTitle":null},"timestamp":"2026-10-27T12:22:04.5375377"}
+
+===== approve PUT http://localhost:8081/api/comments/3/status?status=approved =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:22:04.5791652"}
+
+===== trash-status PUT http://localhost:8081/api/comments/3/status?status=trash =====
+STATUS 500
+{"code":500,"message":"\r\n### Error updating database.  Cause: java.sql.SQLException: Data truncated for column 'status' at row 1\r\n### The error may exist in cn/yanghub/myblog/mapper/CommentMapper.java (best guess)\r\n### The error may involve cn.yanghub.myblog.mapper.CommentMapper.updateById-Inline\r\n### The error occurred while setting parameters\r\n### SQL: UPDATE comments  SET post_id=?,   user_id=?,    visitor_ip=?, content=?,  is_author=?, status=?, like_count=?, reply_count=?, user_agent=?, created_at=?, updated_at=?  WHERE id=?\r\n### Cause: java.sql.SQLException: Data truncated for column 'status' at row 1\n; Data truncated for column 'status' at row 1","data":null,"timestamp":"2026-10-27T12:22:04.6068414"}
+
+===== approve-again PUT http://localhost:8081/api/comments/3/status?status=approved =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:22:04.6254112"}
+
+===== approve-guest PUT http://localhost:8081/api/comments/1/status?status=approved =====
+STATUS 200
+{"code":200,"message":"success","data":null,"timestamp":"2026-10-27T12:22:04.6642463"}
+
+===== list-comments GET http://localhost:8081/api/comments/post/6 =====
+STATUS 200
+{"code":200,"message":"success","data":[{"id":3,"postId":6,"parentId":null,"rootId":null,"userId":1,"visitorName":null,"visitorEmail":null,"visitorWebsite":null,"content":"admin comment","contentHtml":null,"isAuthor":1,"status":"approved","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:22:05","nickname":"管理员","avatarUrl":null,"replies":[],"postTitle":null},{"id":1,"postId":6,"parentId":null,"rootId":null,"userId":null,"visitorName":"guestA","visitorEmail":null,"visitorWebsite":null,"content":"guest hi","contentHtml":null,"isAuthor":0,"status":"approved","likeCount":0,"replyCount":0,"createdAt":"2026-10-27T12:22:04","nickname":null,"avatarUrl":null,"replies":[],"postTitle":null}],"timestamp":"2026-10-27T12:22:04.682931"}
+
+===== get-pub-after-comment GET http://localhost:8081/api/posts/6 =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":6,"title":"bugcheck-pub","slug":"bugcheck-pub-slug","excerpt":null,"content":"published body words","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:04","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":1,"likeCount":0,"commentCount":0,"wordCount":20,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":3,"categoryName":"后端开发","categorySlug":"backend","categoryColor":null,"tagNames":null,"tagSlugs":null},"timestamp":"2026-10-27T12:22:04.7150104"}
+
+===== register POST http://localhost:8081/api/auth/register =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":5,"username":"bugchecker","email":"bugchecker@test.com","nickname":"checker","avatarUrl":null,"bio":null,"website":null,"role":"subscriber","status":1,"lastLoginAt":null,"createdAt":"2026-10-27T12:22:04.8319362"},"timestamp":"2026-10-27T12:22:04.8470018"}
+
+===== login-sub POST http://localhost:8081/api/auth/login =====
+STATUS 200
+{"code":200,"message":"success","data":{"role":"subscriber","nickname":"checker","id":"5","avatar":null,"token":"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9zdWJzY3JpYmVyIn1dLCJzdWIiOiJidWdjaGVja2VyIiwiaWF0IjoxNzkzMDc0OTI0LCJleHAiOjE3OTMxNjEzMjR9.kDUFWh4wcmFCSmZ0SU-oz03RK7bL0UX9Xzpfyo0C-aw","username":"bugchecker"},"timestamp":"2026-10-27T12:22:04.9582859"}
+
+===== sub-update-other PUT http://localhost:8081/api/posts/6 =====
+STATUS 403
+{"code":403,"message":"无权限访问","data":null,"timestamp":"2026-10-27T12:22:05.0069326"}
+
+===== sub-delete DELETE http://localhost:8081/api/posts/6 =====
+STATUS 403
+{"code":403,"message":"无权限访问","data":null,"timestamp":"2026-10-27T12:22:05.0221528"}
+
+===== sub-create POST http://localhost:8081/api/posts =====
+STATUS 200
+{"code":200,"message":"success","data":{"id":7,"title":"sub post","slug":"bugcheck-sub-slug","excerpt":null,"content":"mine","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:05","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":4,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:05","updatedAt":"2026-10-27T12:22:05","authorId":5,"authorName":"checker","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":null,"tagSlugs":null},"timestamp":"2026-10-27T12:22:05.0542039"}
+
+===== user-list GET http://localhost:8081/api/users?page=1&size=5 =====
+STATUS 200
+{"code":200,"message":"success","data":{"records":[{"id":5,"username":"bugchecker","email":"bugchecker@test.com","nickname":"checker","avatarUrl":null,"bio":null,"website":null,"role":"subscriber","status":1,"lastLoginAt":"2026-10-27T12:22:05","createdAt":"2026-10-27T12:22:05"},{"id":4,"username":"py123","email":"py123@test.com","nickname":"py123","avatarUrl":null,"bio":null,"website":null,"role":"subscriber","status":1,"lastLoginAt":"2026-07-08T00:33:50","createdAt":"2026-07-07T20:22:26"},{"id":3,"username":"阳阳3333","email":"1562275143@qq.com","nickname":"py123","avatarUrl":null,"bio":null,"website":null,"role":"subscriber","status":1,"lastLoginAt":null,"createdAt":"2026-07-07T20:16:19"},{"id":2,"username":"zhangsan","email":"test@test.com","nickname":null,"avatarUrl":null,"bio":null,"website":null,"role":"subscriber","status":1,"lastLoginAt":"2026-10-26T20:45:36","createdAt":"2026-04-15T22:41:24"},{"id":1,"username":"admin","email":"admin@example.com","nickname":"管理员","avatarUrl":null,"bio":null,"website":null,"role":"super_admin","status":1,"lastLoginAt":"2026-10-27T12:22:04","createdAt":"2026-04-03T12:05:30"}],"total":5,"current":1,"size":5,"pages":1},"timestamp":"2026-10-27T12:22:05.0939094"}
+
+===== user-list-anon GET http://localhost:8081/api/users =====
+STATUS 401
+
+
+===== page-keyword GET http://localhost:8081/api/posts?page=1&size=2&keyword=bugcheck =====
+STATUS 200
+{"code":200,"message":"success","data":{"records":[{"id":6,"title":"bugcheck-pub","slug":"bugcheck-pub-slug","excerpt":null,"content":"published body words","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:04","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":2,"likeCount":0,"commentCount":0,"wordCount":20,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":3,"categoryName":"后端开发","categorySlug":"backend","categoryColor":"#3b82f6","tagNames":null,"tagSlugs":null}],"total":1,"current":1,"size":2,"pages":1},"timestamp":"2026-10-27T12:22:05.1656242"}
+
+===== manage GET http://localhost:8081/api/posts/manage?page=1&size=5 =====
+STATUS 200
+{"code":200,"message":"success","data":{"records":[{"id":7,"title":"sub post","slug":"bugcheck-sub-slug","excerpt":null,"content":"mine","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:05","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":0,"likeCount":0,"commentCount":0,"wordCount":4,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:05","updatedAt":"2026-10-27T12:22:05","authorId":5,"authorName":"checker","authorAvatar":null,"categoryId":null,"categoryName":null,"categorySlug":null,"categoryColor":null,"tagNames":null,"tagSlugs":null},{"id":6,"title":"bugcheck-pub","slug":"bugcheck-pub-slug","excerpt":null,"content":"published body words","contentType":"markdown","coverImage":null,"coverThumb":null,"status":"published","visibility":"public","publishedAt":"2026-10-27T12:22:04","isTop":0,"isFeatured":0,"isOriginal":1,"sourceName":null,"sourceUrl":null,"allowComment":1,"viewCount":2,"likeCount":0,"commentCount":0,"wordCount":20,"readingTime":1,"metaTitle":null,"metaDescription":null,"createdAt":"2026-10-27T12:22:04","updatedAt":"2026-10-27T12:22:04","authorId":1,"authorName":"管理员","authorAvatar":null,"categoryId":3,"categoryName":"后端开发","categorySlug":"backend","categoryColor":"#3b82f6","tagNames":null,"tagSlugs":null},{"id":4,"title":"消费者处理延迟问题的解决流程","slug":"消费者处理延迟问题的解决流程","excerpt":"**问题描述：** 在一个电商平台的订单处理系统中，使用Kafka作为消息队列，但是近期发现订单消息的消费者处理延迟逐渐增加，导致订单状态更新不及时，影响了用户体验。","content":"**问题描述：** 在一个电商平台的订单处理系统中，使用Kafka作为消息队列，但是近期发现订单消息的消费者处理延迟逐渐增加，导致订单状态更新不及时，影响了用户体验。\n\n**解决流程：**\n\n1. **问题诊断和分析：**\n   - **收集数据和指标：** 使用监控工具（如Prometheus、Grafana）分析消费者组的消费速率、延迟时间等指标，确定问题的具体表现和变化趋势。\n   - **日志分析：** 分析消费者日志，查找可能导致延迟的原因，如处理时间过长的消息、网络问题、消费者负载不均衡等。\n2. **性能优化和调整：**\n   - **增加消费者实例：** 根据监控数据，确定是否需要增加消费者实例来提高整体处理能力。\n   - **优化消费者代码：** 检查消费者逻辑，确保逻辑简洁高效，避免不必要的资源占用和阻塞操作。可以考虑使用并发处理、异步处理等技术来提高处理速度。\n   - **调整消费者配...(truncated)
+
+===== dup-slug POST http://localhost:8081/api/posts =====
+STATUS 500
+{"code":500,"message":"\r\n### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'bugcheck-pub-slug' for key 'posts.uk_slug'\r\n### The error may exist in cn/yanghub/myblog/mapper/PostMapper.java (best guess)\r\n### The error may involve cn.yanghub.myblog.mapper.PostMapper.insert-Inline\r\n### The error occurred while setting parameters\r\n### SQL: INSERT INTO posts  ( author_id,  title, slug,  content, content_type,   status, visibility,                word_count, reading_time,     created_at, updated_at )  VALUES  ( ?,  ?, ?,  ?, ?,   ?, ?,                ?, ?,     ?, ? )\r\n### Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'bugcheck-pub-slug' for key 'posts.uk_slug'\n; Duplicate entry 'bugcheck-pub-slug' for key 'posts.uk_slug'","data":null,"timestamp":"2026-10-27T12:22:05.2528984"}

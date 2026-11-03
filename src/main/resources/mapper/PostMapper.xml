@@ -59,6 +59,7 @@
         LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.deleted_at IS NULL
           AND p.status = 'published'
+          AND (p.visibility = 'public' OR p.visibility IS NULL)
           AND p.is_featured = 1
         ORDER BY p.published_at DESC
         LIMIT #{limit}
@@ -72,6 +73,7 @@
         LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.deleted_at IS NULL
           AND p.status = 'published'
+          AND (p.visibility = 'public' OR p.visibility IS NULL)
           AND p.is_top = 1
         ORDER BY p.published_at DESC
         LIMIT #{limit}
@@ -97,5 +99,21 @@
         WHERE id = #{id}
           AND deleted_at IS NULL
     </update>
+
+    <update id="decrementCommentCount">
+        UPDATE posts
+        SET comment_count = IF(comment_count > 0, comment_count - 1, 0)
+        WHERE id = #{id}
+          AND deleted_at IS NULL
+    </update>
+
+    <select id="countBySlug" resultType="int">
+        SELECT COUNT(*)
+        FROM posts
+        WHERE slug = #{slug}
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
 
 </mapper>

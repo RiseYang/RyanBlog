@@ -8,6 +8,10 @@ export function getCommentsByPost(postId) {
   return request.get(`/comments/post/${postId}`)
 }
 
+export function createComment(data) {
+  return request.post('/comments', data)
+}
+
 export function updateCommentStatus(id, status) {
   return request.put(`/comments/${id}/status`, null, { params: { status } })
 }

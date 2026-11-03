@@ -1,5 +1,6 @@
 package cn.yanghub.myblog.service.impl;
 
+import cn.yanghub.myblog.common.BizException;
 import cn.yanghub.myblog.dto.UserAdminDTO;
 import cn.yanghub.myblog.dto.UserDTO;
 import cn.yanghub.myblog.dto.UserLoginDTO;
@@ -51,12 +52,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserVO register(UserRegisterDTO registerDTO) {
         // 检查用户名
         if (userMapper.selectByUsername(registerDTO.getUsername()) != null) {
-            throw new RuntimeException("用户名已存在");
+            throw BizException.badRequest("用户名已存在");
         }
 
         // 检查邮箱
         if (userMapper.selectByEmail(registerDTO.getEmail()) != null) {
-            throw new RuntimeException("邮箱已被注册");
+            throw BizException.badRequest("邮箱已被注册");
         }
 
         User user = new User();
@@ -97,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 这里可以选择抛出一个自定义异常，或者直接返回错误信息
             // 既然已经登录成功了（authentication 通过了），说明用户肯定存在
             // 如果这里为 null，说明可能是逻辑删除导致的查询失败
-            throw new RuntimeException("用户不存在或已被删除，无法更新登录信息");
+            throw BizException.notFound("用户不存在或已被删除，无法更新登录信息");
         }
         user.setLastLoginAt(LocalDateTime.now());
         user.setLastLoginIp(getClientIp());
@@ -123,7 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User user = userMapper.selectByUsername(authentication.getName());
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw BizException.notFound("用户不存在");
         }
         return convertToVO(user);
     }
@@ -133,6 +134,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserVO updateProfile(UserDTO userDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userMapper.selectByUsername(username);
+        if (user == null) {
+            throw BizException.notFound("用户不存在");
+        }
 
         BeanUtils.copyProperties(userDTO, user, "id", "username", "email", "role", "status");
         userMapper.updateById(user);
@@ -168,7 +172,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserVO getUserById(Long id) {
         User user = userMapper.selectById(id);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw BizException.notFound("用户不存在");
         }
         return convertToVO(user);
     }
@@ -177,16 +181,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional
     public UserVO createUser(UserAdminDTO dto) {
         if (userMapper.selectByUsername(dto.getUsername()) != null) {
-            throw new RuntimeException("用户名已存在");
+            throw BizException.badRequest("用户名已存在");
         }
         if (userMapper.selectByEmail(dto.getEmail()) != null) {
-            throw new RuntimeException("邮箱已被注册");
+            throw BizException.badRequest("邮箱已被注册");
         }
         if (!StringUtils.hasText(dto.getPassword())) {
-            throw new RuntimeException("密码不能为空");
+            throw BizException.badRequest("密码不能为空");
         }
         if (dto.getPassword().length() < 6) {
-            throw new RuntimeException("密码长度至少6位");
+            throw BizException.badRequest("密码长度至少6位");
         }
 
         User user = new User();
@@ -209,16 +213,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserVO updateUser(Long id, UserAdminDTO dto) {
         User user = userMapper.selectById(id);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw BizException.notFound("用户不存在");
         }
 
         User existingUsername = userMapper.selectByUsername(dto.getUsername());
         if (existingUsername != null && !existingUsername.getId().equals(id)) {
-            throw new RuntimeException("用户名已存在");
+            throw BizException.badRequest("用户名已存在");
         }
         User existingEmail = userMapper.selectByEmail(dto.getEmail());
         if (existingEmail != null && !existingEmail.getId().equals(id)) {
-            throw new RuntimeException("邮箱已被注册");
+            throw BizException.badRequest("邮箱已被注册");
         }
 
         user.setUsername(dto.getUsername());
@@ -232,7 +236,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         if (StringUtils.hasText(dto.getPassword())) {
             if (dto.getPassword().length() < 6) {
-                throw new RuntimeException("密码长度至少6位");
+                throw BizException.badRequest("密码长度至少6位");
             }
             user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         }
@@ -247,11 +251,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void deleteUser(Long id) {
         User user = userMapper.selectById(id);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw BizException.notFound("用户不存在");
         }
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         if (user.getUsername().equals(currentUsername)) {
-            throw new RuntimeException("不能删除当前登录用户");
+            throw BizException.badRequest("不能删除当前登录用户");
         }
         userMapper.deleteById(id);
     }
