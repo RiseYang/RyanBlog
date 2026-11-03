@@ -26,14 +26,7 @@
             {{ tab.label }}
           </button>
         </div>
-      <button type="button" class="user-info" :title="accountLabel" @click="openAccount">
-        <span class="avatar">
-          <img v-if="siteProfile.avatar" :src="siteProfile.avatar" alt="" />
-          <span v-else>{{ siteProfile.name.charAt(0) }}</span>
-        </span>
-        <span class="user-name">{{ siteProfile.name }}</span>
-        <span class="level">{{ siteTotal }}</span>
-      </button>
+      <UserAccount :name="siteProfile.name" :avatar="siteProfile.avatar" :badge="siteTotal" />
       <span class="menu-clock" aria-hidden="true">{{ nowText }}</span>
     </header>
 
@@ -61,7 +54,142 @@
 
       <Transition name="panel" mode="out-in">
         <section
-          v-if="activeTab === 'feed'"
+          v-if="activeTab === 'about'"
+          id="panel-about"
+          key="about"
+          class="about-layout profile-sheet"
+          role="tabpanel"
+          aria-labelledby="tab-about"
+        >
+          <aside class="profile-side">
+              <section class="profile-block">
+                <!-- <h2>简历</h2> -->
+                <div class="identity">
+                  <div class="profile-avatar" aria-hidden="true">潘</div>
+                  <div>
+                    <strong>潘阳</strong>
+                    <div class="muted">Java 开发</div>
+                    <div class="muted">本科</div>
+                  </div>
+                </div>
+                <dl class="facts">
+                  <div>
+                    <dt>爱好</dt>
+                    <dd>编程、阅读、旅行、打篮球</dd>
+                  </div>
+                  <div>
+                    <dt>时区</dt>
+                    <dd>UTC+8</dd>
+                  </div>
+                </dl>
+              </section>
+              <section class="profile-block">
+                <h2>联系</h2>
+                <dl class="facts">
+                  <div>
+                    <dt>电话</dt>
+                    <dd><a href="tel:15267100640">15267100640</a></dd>
+                  </div>
+                  <div>
+                    <dt>邮箱</dt>
+                    <dd><a href="mailto:panqiyang567@163.com">panqiyang567@163.com</a></dd>
+                  </div>
+                  <div>
+                    <dt>GitHub</dt>
+                    <dd><a href="https://github.com/RiseYang" target="_blank" rel="noopener noreferrer">Ryan Pan</a></dd>
+                  </div>
+                  <div>
+                    <dt>推特</dt>
+                    <dd><a href="https://x.com/0xSHEEP321" target="_blank" rel="noopener noreferrer">0xSHEEP321</a></dd>
+                  </div>
+                </dl>
+              </section>
+            </aside>
+
+            <div class="profile-main">
+              <header class="profile-head">
+                <h1>潘阳 <span class="slash">／</span> <span class="handle">Ryan Pan</span></h1>
+                <div class="profile-role">
+                  <div>Java 开发</div>
+                  <p>热爱是所有的理由和答案</p>
+                  <LikeButton page-key="about" variant="sheet" />
+                </div>
+              </header>
+
+              <section class="profile-section">
+                <h2>个人简介</h2>
+                <p>工作主动，有责任心，能把交给自己的任务做完。沟通直接，喜欢钻研新技术，学习很快，也能独立把问题收掉。</p>
+                <p>做过订单、商品和营销后台，熟悉 Spring 全家桶、数据库和消息队列，也会写 Vue 页面。工具是日常的一部分：IDEA、Git、Cursor 和 Codex 都在用。</p>
+              </section>
+
+              <section class="profile-section">
+                <h2>工作经历 <span class="sec-note">Java 工程师</span></h2>
+                <div class="job-list">
+                  <article v-for="job in profileJobs" :key="job.company" class="job">
+                    <div class="job-when">{{ job.when }}</div>
+                    <h3>{{ job.company }}</h3>
+                    <p class="muted">{{ job.place }} · {{ job.role }}</p>
+                  </article>
+                </div>
+              </section>
+
+              <section class="profile-section">
+                <h2>项目 <span class="sec-note">主要负责后端</span></h2>
+                <div class="project-grid">
+                  <article v-for="project in profileProjects" :key="project.name" class="project-card">
+                    <h3>{{ project.name }}</h3>
+                    <p class="project-meta">{{ project.when }} · {{ project.role }}</p>
+                    <div class="pills">
+                      <span v-for="tag in project.stack" :key="tag" class="pill">{{ tag }}</span>
+                    </div>
+                    <p class="project-lead">{{ project.summary }}</p>
+                    <p>{{ project.detail }}</p>
+                    <ul>
+                      <li v-for="item in project.points" :key="item">{{ item }}</li>
+                    </ul>
+                    <a
+                      v-if="project.link"
+                      class="more-link"
+                      :href="project.link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >线上地址 ↗</a>
+                  </article>
+                </div>
+              </section>
+
+              <section class="profile-section skill-frame">
+                <h2>技能与工具</h2>
+                <div class="skill-cols">
+                  <div>
+                    <h3>技能</h3>
+                    <ul>
+                      <li v-for="item in profileSkills" :key="item">{{ item }}</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3>工具</h3>
+                    <ul>
+                      <li v-for="item in profileTools" :key="item">{{ item }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+
+              <section class="profile-section">
+                <h2>自我评价</h2>
+                <ul class="plain-list">
+                  <li>工作主动，有责任心，能够积极完成任务。</li>
+                  <li>沟通清楚，热爱工作，愿意往前赶。</li>
+                  <li>喜欢钻研新技术，学习能力强，能够独立解决问题。</li>
+                  <li>有团队协作意识和抗压能力。</li>
+                </ul>
+              </section>
+            </div>
+        </section>
+
+        <section
+          v-else-if="activeTab === 'feed'"
           id="panel-feed"
           key="feed"
           class="panel-view"
@@ -241,140 +369,6 @@
           </div>
         </section>
 
-        <section
-          v-else
-          id="panel-about"
-          key="about"
-          class="about-layout profile-sheet"
-          role="tabpanel"
-          aria-labelledby="tab-about"
-        >
-          <aside class="profile-side">
-            <section class="profile-block">
-              <h2>关于</h2>
-              <div class="identity">
-                <div class="profile-avatar" aria-hidden="true">潘</div>
-                <div>
-                  <strong>潘阳</strong>
-                  <div class="muted">Java 开发</div>
-                  <div class="muted">本科</div>
-                </div>
-              </div>
-              <dl class="facts">
-                <div>
-                  <dt>爱好</dt>
-                  <dd>编程、阅读、旅行、打篮球</dd>
-                </div>
-                <div>
-                  <dt>时区</dt>
-                  <dd>UTC+8</dd>
-                </div>
-              </dl>
-            </section>
-            <section class="profile-block">
-              <h2>联系</h2>
-              <dl class="facts">
-                <div>
-                  <dt>电话</dt>
-                  <dd><a href="tel:15267100640">15267100640</a></dd>
-                </div>
-                <div>
-                  <dt>邮箱</dt>
-                  <dd><a href="mailto:panqiyang567@163.com">panqiyang567@163.com</a></dd>
-                </div>
-                <div>
-                  <dt>GitHub</dt>
-                  <dd><a href="https://github.com/RiseYang" target="_blank" rel="noopener noreferrer">Ryan Pan</a></dd>
-                </div>
-                <div>
-                  <dt>推特</dt>
-                  <dd><a href="https://x.com/0xSHEEP321" target="_blank" rel="noopener noreferrer">0xSHEEP321</a></dd>
-                </div>
-              </dl>
-            </section>
-          </aside>
-
-          <div class="profile-main">
-            <header class="profile-head">
-              <h1>潘阳 <span class="slash">／</span> <span class="handle">Ryan Pan</span></h1>
-              <div class="profile-role">
-                <div>Java 开发</div>
-                <p>热爱是所有的理由和答案</p>
-                <LikeButton page-key="about" variant="sheet" />
-              </div>
-            </header>
-
-            <section class="profile-section">
-              <h2>个人简介</h2>
-              <p>工作主动，有责任心，能把交给自己的任务做完。沟通直接，喜欢钻研新技术，学习很快，也能独立把问题收掉。</p>
-              <p>做过订单、商品和营销后台，熟悉 Spring 全家桶、数据库和消息队列，也会写 Vue 页面。工具是日常的一部分：IDEA、Git、Cursor 和 Codex 都在用。</p>
-            </section>
-
-            <section class="profile-section">
-              <h2>工作经历 <span class="sec-note">Java 工程师</span></h2>
-              <div class="job-list">
-                <article v-for="job in profileJobs" :key="job.company" class="job">
-                  <div class="job-when">{{ job.when }}</div>
-                  <h3>{{ job.company }}</h3>
-                  <p class="muted">{{ job.place }} · {{ job.role }}</p>
-                </article>
-              </div>
-            </section>
-
-            <section class="profile-section">
-              <h2>项目 <span class="sec-note">主要负责后端</span></h2>
-              <div class="project-grid">
-                <article v-for="project in profileProjects" :key="project.name" class="project-card">
-                  <h3>{{ project.name }}</h3>
-                  <p class="project-meta">{{ project.when }} · {{ project.role }}</p>
-                  <div class="pills">
-                    <span v-for="tag in project.stack" :key="tag" class="pill">{{ tag }}</span>
-                  </div>
-                  <p class="project-lead">{{ project.summary }}</p>
-                  <p>{{ project.detail }}</p>
-                  <ul>
-                    <li v-for="item in project.points" :key="item">{{ item }}</li>
-                  </ul>
-                  <a
-                    v-if="project.link"
-                    class="more-link"
-                    :href="project.link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >线上地址 ↗</a>
-                </article>
-              </div>
-            </section>
-
-            <section class="profile-section skill-frame">
-              <h2>技能与工具</h2>
-              <div class="skill-cols">
-                <div>
-                  <h3>技能</h3>
-                  <ul>
-                    <li v-for="item in profileSkills" :key="item">{{ item }}</li>
-                  </ul>
-                </div>
-                <div>
-                  <h3>工具</h3>
-                  <ul>
-                    <li v-for="item in profileTools" :key="item">{{ item }}</li>
-                  </ul>
-                </div>
-              </div>
-            </section>
-
-            <section class="profile-section">
-              <h2>自我评价</h2>
-              <ul class="plain-list">
-                <li>工作主动，有责任心，能够积极完成任务。</li>
-                <li>沟通清楚，热爱工作，愿意往前赶。</li>
-                <li>喜欢钻研新技术，学习能力强，能够独立解决问题。</li>
-                <li>有团队协作意识和抗压能力。</li>
-              </ul>
-            </section>
-          </div>
-        </section>
       </Transition>
         </div>
       </section>
@@ -390,11 +384,12 @@ import { getCategories } from '@/api/category'
 import { getTags } from '@/api/tag'
 import { useUserStore } from '@/stores/user'
 import LikeButton from '@/components/LikeButton.vue'
+import UserAccount from '@/components/UserAccount.vue'
 
 const tabs = [
+  { id: 'about', label: '简历' },
   { id: 'feed', label: '文章' },
-  { id: 'categories', label: '分类' },
-  { id: 'about', label: '关于' }
+  { id: 'categories', label: '分类' }
 ]
 
 const router = useRouter()
@@ -413,7 +408,7 @@ const siteTotal = ref(0)
 const pageSize = 9
 const selectedCategoryId = ref(null)
 const selectedTagName = ref(null)
-const activeTab = ref('feed')
+const activeTab = ref('about')
 const searchInput = ref('')
 const keyword = ref('')
 const composing = ref(false)
@@ -433,8 +428,6 @@ const siteProfile = computed(() => ({
     ? (userStore.userInfo?.bio || '博客作者，热爱技术与创作。')
     : '分享技术见解，探索创新可能。欢迎登录后发布你的第一篇文章。'
 }))
-
-const accountLabel = computed(() => (userStore.isLoggedIn ? '进入后台' : '登录'))
 
 const displayPosts = computed(() => {
   if (!selectedTagName.value) return posts.value
@@ -537,6 +530,7 @@ const emptyText = computed(() => {
 })
 
 const statusText = computed(() => {
+  if (activeTab.value === 'about') return '简历'
   if (refreshing.value) return '正在刷新'
   if (loading.value && posts.value.length === 0) return '正在读取'
   if (errorMessage.value) return '读取失败，可重试'
@@ -552,9 +546,9 @@ watch(
 )
 
 function tabFromHash(hash) {
+  if (hash === '#feed' || hash === '#posts') return 'feed'
   if (hash === '#categories' || hash === '#category') return 'categories'
-  if (hash === '#about') return 'about'
-  return 'feed'
+  return 'about'
 }
 
 function tickClock() {
@@ -592,7 +586,8 @@ function isFresh(post) {
 
 function switchTab(tab) {
   activeTab.value = tab
-  const nextHash = tab === 'feed' ? '' : `#${tab}`
+  const nextHash = tab === 'about' ? '' : `#${tab}`
+  window.scrollTo({ top: 0 })
   if ((route.hash || '') === nextHash) return
   router.replace({ path: '/', hash: nextHash })
 }
@@ -608,7 +603,7 @@ function onTabKeydown(event, index) {
 
 function goHome(event) {
   event?.preventDefault()
-  activeTab.value = 'feed'
+  activeTab.value = 'about'
   const needsReload = selectedCategoryId.value != null || !!keyword.value
   selectedCategoryId.value = null
   selectedTagName.value = null
@@ -619,10 +614,6 @@ function goHome(event) {
   }
   window.scrollTo({ top: 0 })
   if (needsReload) reloadPosts()
-}
-
-function openAccount() {
-  router.push(userStore.isLoggedIn ? '/admin' : '/login')
 }
 
 function openPost(post) {

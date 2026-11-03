@@ -341,7 +341,7 @@ CREATE TABLE `menus`  (
 INSERT INTO `menus` VALUES (1, '首页', 'header', NULL, 1, '首页', '/', '_self', NULL, 1, 1, '2026-04-03 12:05:30');
 INSERT INTO `menus` VALUES (2, '归档', 'header', NULL, 1, '归档', '/archives', '_self', NULL, 2, 1, '2026-04-03 12:05:30');
 INSERT INTO `menus` VALUES (3, '标签', 'header', NULL, 1, '标签', '/tags', '_self', NULL, 3, 1, '2026-04-03 12:05:30');
-INSERT INTO `menus` VALUES (4, '关于', 'header', NULL, 1, '关于', '/about', '_self', NULL, 4, 1, '2026-04-03 12:05:30');
+INSERT INTO `menus` VALUES (4, '简历', 'header', NULL, 1, '简历', '/about', '_self', NULL, 4, 1, '2026-04-03 12:05:30');
 
 -- ----------------------------
 -- Table structure for notifications

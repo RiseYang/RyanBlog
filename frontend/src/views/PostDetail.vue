@@ -10,17 +10,11 @@
         </svg>
       </router-link>
       <nav class="tabs" aria-label="页面">
-        <router-link to="/" class="tab">文章</router-link>
+        <router-link to="/" class="tab">简历</router-link>
+        <router-link :to="{ path: '/', hash: '#feed' }" class="tab">文章</router-link>
         <router-link :to="{ path: '/', hash: '#categories' }" class="tab">分类</router-link>
-        <router-link :to="{ path: '/', hash: '#about' }" class="tab">关于</router-link>
       </nav>
-      <button type="button" class="user-info" :title="accountLabel" @click="openAccount">
-        <span class="avatar">
-          <img v-if="profile.avatar" :src="profile.avatar" alt="" />
-          <span v-else>{{ profile.name.charAt(0) }}</span>
-        </span>
-        <span class="user-name">{{ profile.name }}</span>
-      </button>
+      <UserAccount :name="profile.name" :avatar="profile.avatar" />
       <span class="menu-clock" aria-hidden="true">{{ nowText }}</span>
     </header>
 
@@ -61,7 +55,7 @@
         <p>{{ errorMessage }}</p>
         <div class="state-actions">
           <button type="button" class="btn" @click="loadPost">重新连接</button>
-          <router-link to="/" class="btn ghost">返回文章</router-link>
+          <router-link :to="{ path: '/', hash: '#feed' }" class="btn ghost">返回文章</router-link>
         </div>
       </div>
 
@@ -133,7 +127,7 @@
             </li>
           </ol>
         </section>
-        <router-link to="/" class="btn back">返回文章</router-link>
+        <router-link :to="{ path: '/', hash: '#feed' }" class="btn back">返回文章</router-link>
       </article>
         </div>
       </section>
@@ -150,6 +144,7 @@ import { createComment, getCommentsByPost } from '@/api/comment'
 import { formatDateTime } from '@/utils/format'
 import { useUserStore } from '@/stores/user'
 import LikeButton from '@/components/LikeButton.vue'
+import UserAccount from '@/components/UserAccount.vue'
 
 function escapeAttr(value) {
   return String(value).replace(/[&"<>]/g, (char) => ({
@@ -204,8 +199,6 @@ const profile = computed(() => ({
   avatar: userStore.isLoggedIn ? userStore.avatar : ''
 }))
 
-const accountLabel = computed(() => (userStore.isLoggedIn ? '进入后台' : '登录'))
-
 const statusText = computed(() => {
   if (loading.value) return '正在读取'
   if (errorMessage.value) return '读取失败，可重试'
@@ -229,10 +222,6 @@ const renderedContent = computed(() => {
 
 function tickClock() {
   nowText.value = new Date().toLocaleTimeString('zh-CN', { hour12: false })
-}
-
-function openAccount() {
-  router.push(userStore.isLoggedIn ? '/admin' : '/login')
 }
 
 function displayName(item) {

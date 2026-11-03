@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', {
 
   getters: {
     isLoggedIn: (state) => !!state.token,
+    isAdmin: (state) => state.userInfo?.username === 'admin',
     displayName: (state) => state.userInfo?.nickname || state.userInfo?.username || '用户',
     avatar: (state) => state.userInfo?.avatarUrl || state.userInfo?.avatar || ''
   },

@@ -87,8 +87,12 @@ router.beforeEach((to) => {
     return { name: 'Login', query: { redirect: to.fullPath } }
   }
 
+  if (to.path.startsWith('/admin') && userStore.isLoggedIn && !userStore.isAdmin) {
+    return { path: '/' }
+  }
+
   if (to.meta.guest && userStore.isLoggedIn) {
-    return { name: 'Dashboard', path: '/admin' }
+    return userStore.isAdmin ? { path: '/admin' } : { path: '/' }
   }
 
   const requiredRoles = to.meta.roles

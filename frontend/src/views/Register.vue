@@ -81,8 +81,10 @@ import { User, Lock, Message, Avatar } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import AuthLayout from '@/components/AuthLayout.vue'
 import { register } from '@/api/auth'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 const formRef = ref()
 const loading = ref(false)
 
@@ -133,8 +135,12 @@ async function handleRegister() {
       nickname: form.nickname || form.username,
       password: form.password
     })
-    ElMessage.success('注册成功，请登录')
-    router.push('/login')
+    await userStore.login({
+      username: form.username,
+      password: form.password
+    })
+    ElMessage.success('注册成功')
+    router.push(userStore.isAdmin ? '/admin' : '/')
   } catch {
     // error handled by interceptor
   } finally {
