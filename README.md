@@ -6,7 +6,7 @@
 [![Vue](https://img.shields.io/badge/Vue-3-111111?style=flat&logo=apple&logoColor=white)](#快速开始)
 [![License: MIT](https://img.shields.io/badge/License-MIT-111111?style=flat&logo=apple&logoColor=white)](LICENSE)
 
-个人博客。前台看简历和文章，`admin` 进后台管内容。线上：[https://ryanblog.site](https://ryanblog.site)
+苹果麦塔金风格的个人博客。前台看简历和文章，`admin` 进后台管内容。线上：[https://ryanblog.site](https://ryanblog.site)
 
 ## 简介
 
