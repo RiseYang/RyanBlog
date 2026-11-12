@@ -1,29 +1,33 @@
 <template>
   <div class="admin-layout">
-    <aside class="sidebar">
+    <div v-if="navOpen" class="sidebar-mask" @click="navOpen = false"></div>
+    <aside class="sidebar" :class="{ open: navOpen }">
       <div class="sidebar-logo">
         <el-icon :size="24"><Notebook /></el-icon>
         <span>RyanBlog</span>
+        <button type="button" class="sidebar-close" aria-label="关闭菜单" @click="navOpen = false">
+          <el-icon :size="18"><Close /></el-icon>
+        </button>
       </div>
 
       <nav class="sidebar-nav">
-        <router-link to="/admin" class="nav-item" :class="{ active: route.path === '/admin' }">
+        <router-link to="/admin" class="nav-item" :class="{ active: route.path === '/admin' }" @click="navOpen = false">
           <el-icon><Odometer /></el-icon>
           <span>控制台</span>
         </router-link>
-        <router-link to="/admin/posts" class="nav-item" :class="{ active: route.path === '/admin/posts' }">
+        <router-link to="/admin/posts" class="nav-item" :class="{ active: route.path === '/admin/posts' }" @click="navOpen = false">
           <el-icon><Document /></el-icon>
           <span>文章管理</span>
         </router-link>
-        <router-link to="/admin/categories" class="nav-item" :class="{ active: route.path === '/admin/categories' }">
+        <router-link to="/admin/categories" class="nav-item" :class="{ active: route.path === '/admin/categories' }" @click="navOpen = false">
           <el-icon><FolderOpened /></el-icon>
           <span>分类管理</span>
         </router-link>
-        <router-link to="/admin/tags" class="nav-item" :class="{ active: route.path === '/admin/tags' }">
+        <router-link to="/admin/tags" class="nav-item" :class="{ active: route.path === '/admin/tags' }" @click="navOpen = false">
           <el-icon><PriceTag /></el-icon>
           <span>标签管理</span>
         </router-link>
-        <router-link to="/admin/comments" v-if="canAccessComments" class="nav-item" :class="{ active: route.path === '/admin/comments' }">
+        <router-link to="/admin/comments" v-if="canAccessComments" class="nav-item" :class="{ active: route.path === '/admin/comments' }" @click="navOpen = false">
           <el-icon><ChatDotRound /></el-icon>
           <span>评论管理</span>
         </router-link>
@@ -32,6 +36,7 @@
           to="/admin/users"
           class="nav-item"
           :class="{ active: route.path === '/admin/users' }"
+          @click="navOpen = false"
         >
           <el-icon><User /></el-icon>
           <span>用户管理</span>
@@ -44,6 +49,7 @@
           href="http://localhost:8081/api/swagger-ui/index.html"
           target="_blank"
           rel="noopener"
+          @click="navOpen = false"
         >
           <el-icon><Link /></el-icon>
           <span>API 文档</span>
@@ -54,6 +60,15 @@
     <div class="main-area">
       <header class="topbar">
         <div class="topbar-left">
+          <button
+            type="button"
+            class="menu-toggle"
+            :aria-expanded="navOpen"
+            aria-label="打开菜单"
+            @click="navOpen = true"
+          >
+            <el-icon :size="20"><Menu /></el-icon>
+          </button>
           <h1>{{ pageTitle }}</h1>
         </div>
         <div class="topbar-right">
@@ -88,7 +103,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/stores/user'
@@ -97,6 +112,28 @@ import { canAccessComments as hasCommentAccess, canAccessUsers as hasUserAccess 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const navOpen = ref(false)
+
+watch(() => route.path, () => {
+  navOpen.value = false
+})
+
+watch(navOpen, (open) => {
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
+function onKeydown(event) {
+  if (event.key === 'Escape') navOpen.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', onKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
 
 const pageTitle = computed(() => route.meta.title || '控制台')
 
@@ -139,7 +176,9 @@ async function handleCommand(command) {
 <style scoped>
 .admin-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -160,6 +199,46 @@ async function handleCommand(command) {
   font-weight: 700;
   color: #fff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-logo span {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-close,
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.menu-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.menu-toggle:hover,
+.sidebar-close:hover {
+  background: var(--page-bg);
+}
+
+.sidebar-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.sidebar-close:hover {
+  background: var(--sidebar-hover);
 }
 
 .sidebar-nav {
@@ -199,6 +278,8 @@ async function handleCommand(command) {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .topbar {
@@ -214,9 +295,19 @@ async function handleCommand(command) {
   z-index: 10;
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .topbar-left h1 {
   font-size: 1.25rem;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-info {
@@ -252,6 +343,129 @@ async function handleCommand(command) {
 
 .page-content {
   flex: 1;
-  padding: 24px 28px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 12px 16px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle,
+  .sidebar-close {
+    display: inline-flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 40;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: rgba(15, 23, 42, 0.45);
+  }
+
+  .topbar {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .topbar-left h1 {
+    font-size: 1.05rem;
+  }
+
+  .user-meta {
+    display: none;
+  }
+
+  .user-info {
+    gap: 0;
+    padding: 4px;
+  }
+
+  .page-content {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .admin-layout {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .main-area,
+  .page-content {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+}
+</style>
+
+<style>
+@media (max-width: 768px) {
+  .manage-page .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .manage-page .toolbar .el-input,
+  .manage-page .toolbar .el-select {
+    width: 100% !important;
+  }
+
+  .manage-page .panel {
+    padding: 14px;
+  }
+
+  .manage-page .pager {
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+
+  .el-dialog {
+    width: calc(100vw - 24px) !important;
+    margin: 12px auto !important;
+  }
+
+  .el-dialog .el-row .el-col {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .el-dialog .el-form-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .el-dialog .el-form-item__label {
+    width: auto !important;
+    height: auto;
+    justify-content: flex-start;
+    line-height: 1.4;
+    padding: 0 0 6px;
+  }
+
+  .el-dialog .el-form-item__content {
+    margin-left: 0 !important;
+  }
+
+  .el-message-box {
+    width: calc(100vw - 32px) !important;
+  }
 }
 </style>
