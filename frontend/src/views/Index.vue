@@ -87,8 +87,8 @@
                 <h2>联系</h2>
                 <dl class="facts">
                   <div>
-                    <dt>电话</dt>
-                    <dd><a href="tel:15267100640">15267100640</a></dd>
+                    <dt>微信</dt>
+                    <dd><a href="tel:15267100640">pqy027515</a></dd>
                   </div>
                   <div>
                     <dt>邮箱</dt>

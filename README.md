@@ -4,6 +4,7 @@
 [![Online](https://img.shields.io/badge/线上-ryanblog.site-111111?style=flat&logo=apple&logoColor=white)](https://ryanblog.site)
 [![JDK](https://img.shields.io/badge/JDK-17-111111?style=flat&logo=apple&logoColor=white)](#快速开始)
 [![Vue](https://img.shields.io/badge/Vue-3-111111?style=flat&logo=apple&logoColor=white)](#快速开始)
+[![License: MIT](https://img.shields.io/badge/License-MIT-111111?style=flat&logo=apple&logoColor=white)](LICENSE)
 
 个人博客。前台看简历和文章，`admin` 进后台管内容。线上：[https://ryanblog.site](https://ryanblog.site)
 
@@ -99,4 +100,6 @@ docker-compose.yml MySQL、Redis、后端、前端一起启动
 2. Fork 后从 `main` 拉分支，改动尽量只做一件事。
 3. 提交 Pull Request，说明为什么改、怎么验证。
 
-大改动先在 Issue 里讨论，避免和现有页面走岔。仓库目前没有 `LICENSE` 文件，代码版权归作者所有。如果希望按开源许可使用，请先开 Issue 商量许可方式。
+大改动先在 Issue 里讨论，避免和现有页面走岔。
+
+本项目使用 [MIT License](LICENSE)。你可以自由使用、修改和再分发，只需保留版权声明和许可文本。欢迎把改动提交回来。
